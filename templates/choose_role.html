@@ -1,0 +1,15 @@
+{% extends 'base_accounts.html' %}
+
+{% block title %}Choose your role {% endblock %}
+
+{% block content %}
+  <div class="text-center  thead-dark  card-footer bg-light">
+  <h2 class="text-center">Choose role.</h2>
+  <p class="lead text-center">Select below the type of account you want to create</p>
+  <a href="{% url 'accounts:signup_blogger' %}" class="btn btn-primary  " role="button">I'm a Blogger</a>
+  <a href="{% url 'accounts:signup_reader' %}" class="btn btn-primary "  role="button">I'm a Reader</a>
+  </div>
+     <div class="card-footer text-muted text-center bg-light">
+          Already have an account? <a href="{% url 'accounts:login' %}">Log in</a>
+        </div>
+{% endblock %}

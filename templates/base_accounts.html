@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load flatpages %}
+{% get_flatpages as flatpages %}
+
+
+{% block stylesheet %}
+  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+
+{% block body %}
+  <div class="container" style="margin-bottom: 100px;">
+   {% if messages %}
+    <div class="alert alert-success">
+    {% for m in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+    </div>
+    {% endif %}
+    <h1 class="text-center logo my-4">
+      <a href="{% url 'boards:home' %}">Django Boards</a>
+    </h1>
+      {% block content %}
+      {% endblock %}
+  </div>
+
+  <footer class="footer">
+      <p class="text-center text-light">
+      ©Django Boards. All Rights Reserved | Design by Danil Kolodyazhny<br>
+      <a href="/pages/policy/">Privacy Policy</a> /
+      <a href="/pages/terms/">Terms</a>
+    </p>
+    </footer>
+
+{% endblock %}

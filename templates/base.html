@@ -1,0 +1,96 @@
+{% load static %}<!DOCTYPE html>
+{% load flatpages %}
+{% get_flatpages as flatpages %}
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Django Boards{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kirang+Haerang&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block stylesheet %}{% endblock %}
+  </head>
+  <body>
+
+  {% block body %}
+
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark ">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'boards:home' %}">Django Boards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainMenu">
+      {% if user.is_authenticated %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ user.username }}
+            </a>
+              {% if user.blogger_user.is_super_user %}
+              <em class="text-muted">Blogger</em>
+              {% else %}
+              <em class="text-muted">Reader</em>
+              {% endif %}
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+              <a class="dropdown-item" href="{% url 'accounts:my_account' %}">My account</a>
+              <a class="dropdown-item" href="{% url 'accounts:password_change' %}">Change password</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'accounts:logout' %}">Log out</a>
+            </div>
+          </li>
+        </ul>
+      {% else %}
+        <form class="form-inline ml-auto">
+          <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary">Log in</a>
+          <a href="{% url 'accounts:signup' %}" class="btn btn-primary ml-2">Sign up</a>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+    <div class="container wrap pt-1 pb-1" style="margin-bottom: 100px;">
+      {% if messages %}
+    <div class="alert alert-success">
+    {% for m in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+    </div>
+    {% endif %}
+      <ol class="breadcrumb my-4">
+        {% block breadcrumb %}
+        {% endblock %}
+      </ol>
+      {% block content %}
+      {% endblock %}
+    </div>
+
+ <footer class="footer">
+      <p class="text-center text-light">
+      ©Django Boards. All Rights Reserved | Design by Danil Kolodyazhny<br>
+      <a href="/pages/policy/">Privacy Policy</a> /
+      <a href="/pages/terms/">Terms</a>
+    </p>
+    </footer>
+
+
+
+  {% endblock body %}
+  <script src="{% static 'js/jquery-3.2.1.min.js'  %}"></script>
+  <script src="{% static 'js/popper.min.js'  %}"></script>
+  <script src="{% static 'js/bootstrap.min.js'  %}"></script>
+
+  {% block javascript %}
+
+
+
+  {% endblock %}
+  </body>
+
+
+</html>
+

@@ -1,0 +1,16 @@
+body {
+    background-image: url("../img/ignasi_pattern_s.png");
+}
+
+.wrap {
+    background-color: white;
+}
+
+.footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    padding: 0px;
+}
+
