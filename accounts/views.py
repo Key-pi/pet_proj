@@ -1,23 +1,20 @@
-import json
-import urllib.request, urllib.parse
-import requests
-import csv
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.conf import settings
 from django.contrib import auth
+from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-# from boards.models import User
 from django.contrib.auth.views import LoginView
-from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
-from django.conf import settings
-from django.contrib.messages.views import SuccessMessageMixin
 
-from .forms import SignUpForm, BloggerRegisterForm, ReaderRegisterForm
+import requests
+
+from .forms import BloggerRegisterForm, ReaderRegisterForm, SignUpForm
 from .tasks import send_email_task
 
 
@@ -104,7 +101,6 @@ def signup_reader(request):
         return render(request, 'signup_reader.html', context={'form': form_user, 'form1': form_reader})
 
 
-
 class Login(LoginView):
     model = User
     template_name = 'login.html'
@@ -138,7 +134,5 @@ class UserUpdateView(SuccessMessageMixin, UpdateView):
     success_message = 'Account successfully updated!)'
     success_url = reverse_lazy('accounts:my_account')
 
-
     def get_object(self, queryset=None):
         return self.request.user
-

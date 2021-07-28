@@ -1,20 +1,22 @@
 import csv
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse, HttpResponseNotFound
+from django.db.models import Count
+from django.http import HttpResponse
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import render_to_string
-from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.views.generic import ListView, UpdateView
+
 from weasyprint import HTML
-from django.contrib import messages
 
+# from django.contrib import messages
 
+from .forms import BoardForm, NewTopicForm, PostForm
 from .models import Board, Post, Topic
-from .forms import NewTopicForm, PostForm, BoardForm
 
 
 class BoardListView(ListView):
@@ -32,8 +34,9 @@ def save_board_form(request, form, template_name):
             form.save()
             data['form_is_valid'] = True
             board = Board.objects.all()
-            data['html_board_list'] = render_to_string('home.html', {
-                'boards': board
+            data['html_partial_board'] = render_to_string('includes/partial_board.html', {
+                'boards': board,
+                'user': request.user
             })
         else:
             data['form_is_valid'] = False
@@ -62,14 +65,20 @@ def board_update(request, pk):
 def board_delete(request, pk):
     board = get_object_or_404(Board, pk=pk)
     data = dict()
-    if request.method == "POST":
+    boards = Board.objects.all()
+    if request.method == 'POST':
         board.delete()
         data['form_is_valid'] = True
-        board = Board.objects.all()
-        data['html_board_list'] = render_to_string('home.html', {'boards': board})
+        data['html_partial_board'] = render_to_string('includes/partial_board.html', {
+            'boards': boards,
+            'user': request.user
+        })
     else:
         context = {'boards': board}
-        data['html_form'] = render_to_string('board_delete.html', context, request=request)
+        data['html_form'] = render_to_string('board_delete.html',
+                                             context,
+                                             request=request,
+                                             )
     return JsonResponse(data)
 
 

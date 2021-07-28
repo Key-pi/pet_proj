@@ -1,5 +1,6 @@
-from django.core.management.base import BaseCommand
 from boards.models import Board
+
+from django.core.management.base import BaseCommand
 
 from faker import Faker
 
@@ -24,4 +25,4 @@ class Command(BaseCommand):
         ]
 
         UserModel.objects.bulk_create(obj)
-        print("Board Created!")
+        print("Board Created!") # noqa T001

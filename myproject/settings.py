@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&cxd9+%fml#v6y)pa16a#!nc*kt^fhuf5__okl5+9h5+-euehm'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-&cxd9+%fml#v6y)pa16a#!nc*kt^fhuf5__okl5+9h5+-euehm')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,6 +29,10 @@ ALLOWED_HOSTS = [
     'mysite.ua',
 ]
 
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -46,7 +50,14 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'boards.apps.BoardsConfig',
     'widget_tweaks',
+    'django_extensions',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'debug_toolbar',
+    ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,7 +68,31 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'social_django.middleware.SocialAuthExceptionMiddleware',
+
 ]
+
+
+if DEBUG:
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.mail.mail_validation',
+    'social.pipeline.social_auth.associate_by_email',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
+)
+
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -74,14 +109,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
 
             ],
         },
     },
 ]
-
-
 
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
@@ -116,7 +151,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -141,11 +175,10 @@ STATICFILES_DIRS = [
 ]
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+# AUTH_USER_MODEL = 'boards.User'
 
-#AUTH_USER_MODEL = 'boards.User'
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
@@ -168,8 +201,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1090285993143-bd2ksutc1lnf44kvclaq8oiauiogscpi.
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'NVy8QZl2LqmT4eSBVqP-dS8p'
 
 # AUTHENTICATION_BACKENDS = [
-#     'social_core.backends.linkedin.LinkedinOAuth2',
-#     'social_core.backends.instagram.InstagramOAuth2',
 #     'django.contrib.auth.backends.ModelBackend',
 #     'social_core.backends.github.GithubOAuth2',
 #     'social_core.backends.google.GoogleOAuth2',
@@ -183,8 +214,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'kd0996253125@gmail.com'
 EMAIL_HOST_PASSWORD = '1973s1975o2001d'
-
-
 EMAIL_PORT = 587
 # EMAIL_HOST_PASSWORD = 'uibxxgweocxnwlld'
-

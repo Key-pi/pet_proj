@@ -1,7 +1,10 @@
 from django import forms
-from .models import Topic, Post, Blogger, Reader, Board #, Photo
-from django.core.files import File
-from PIL import Image
+
+from .models import Board, Post, Topic  # , Photo
+
+
+# from django.core.files import File
+# from PIL import Image
 
 
 class NewTopicForm(forms.ModelForm):
@@ -28,7 +31,6 @@ class BoardForm(forms.ModelForm):
     class Meta:
         model = Board
         fields = ('name', 'description')
-
 
 # class PhotoForm(forms.ModelForm):
 #     x = forms.FileField(widget=forms.HiddenInput())
