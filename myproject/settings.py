@@ -30,9 +30,9 @@ ALLOWED_HOSTS = [
 ]
 
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+# ]
 
 # Application definition
 
@@ -90,7 +90,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details'
+    'social.pipeline.user.user_details',
+    'boards.utils.create_profile',
 )
 
 
@@ -216,4 +217,3 @@ EMAIL_HOST_USER = 'kd0996253125@gmail.com'
 EMAIL_HOST_PASSWORD = '1973s1975o2001d'
 EMAIL_PORT = 587
 # EMAIL_HOST_PASSWORD = 'uibxxgweocxnwlld'
-

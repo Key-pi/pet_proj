@@ -1,5 +1,6 @@
 import csv
 
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Count
@@ -25,6 +26,14 @@ class BoardListView(ListView):
     template_name = 'home.html'
     paginate_by = 20
     queryset = Board.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        # messages.add_message(self.request,messages.SUCCESS,'khftyde')
+        context = super().get_context_data(**kwargs)
+        context['logs'] = LogEntry.objects.exclude(change_message="No fields changed.").order_by('-action_time')[:20]
+        context['logCount'] = LogEntry.objects.exclude(change_message="No fields changed.").order_by('-action_time')[
+                              :20].count()
+        return context
 
 
 def save_board_form(request, form, template_name):
