@@ -17,6 +17,19 @@
               <div class="g-recaptcha" data-sitekey="6Ld1p5UbAAAAAHmsIGf4qWV3fNiHgNnM4tq6mrZ5"></div>
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
           </form>
+             <div class="row text-center">
+    <div class="col-md-8 mx-auto social-container my-2 order-md-1">
+        <button class="btn mb-1 m-md-1 ">
+
+            <a href="{% url 'social:begin' 'github' %}">Login with Github</a>
+        </button>
+        <button class="btn ">
+            <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google
+            </a>
+        </button>
+
+    </div>
+</div>
         </div>
         <div class="card-footer text-muted text-center">
           New to Django Boards? <a href="{% url 'accounts:signup' %}">Sign up</a>

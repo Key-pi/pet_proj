@@ -19,21 +19,6 @@
 
           </form>
         </div>
-          <div class="row">
-    <div class="col-md-8 mx-auto social-container my-2 order-md-1">
-        <button class="btn  ">
-            <a href="{% url 'accounts:social:begin' 'github' %}">Login with Github</a>
-        </button>
-        <button class="btn  ">
-            <a href="{% url 'accounts:social:begin' 'google-oauth2' %}">Login with Google
-            </a>
-        </button>
-        <button class="btn ">
-            <a href="#">Login with LinkedIn</a>
-        </button>
-    </div>
-</div>
-
         <div class="card-footer text-muted text-center">
           Already have an account? <a href="{% url 'accounts:login' %}">Log in</a>
         </div>

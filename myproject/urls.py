@@ -29,6 +29,8 @@ urlpatterns = [
          name='password_change_done'
          ),
     path('pages/', include('django.contrib.flatpages.urls')),
+    path('social-auth/', include('social_django.urls', namespace='social')),
+
 ]
 
 

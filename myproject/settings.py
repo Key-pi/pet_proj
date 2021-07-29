@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-&cxd9+%fml#v6y)pa16a#
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'mysite.ua',
+    '*',
 ]
 
 
@@ -200,12 +200,12 @@ SOCIAL_AUTH_GITHUB_SECRET = '070da7820431cb8b3eb55b89fb64ca4380728c03'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1090285993143-bd2ksutc1lnf44kvclaq8oiauiogscpi.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'NVy8QZl2LqmT4eSBVqP-dS8p'
 
-# AUTHENTICATION_BACKENDS = [
-#     'django.contrib.auth.backends.ModelBackend',
-#     'social_core.backends.github.GithubOAuth2',
-#     'social_core.backends.google.GoogleOAuth2',
-#
-# ]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+
+]
 
 CELERY_BROKER_URL = 'amqp://localhost'
 
@@ -216,3 +216,4 @@ EMAIL_HOST_USER = 'kd0996253125@gmail.com'
 EMAIL_HOST_PASSWORD = '1973s1975o2001d'
 EMAIL_PORT = 587
 # EMAIL_HOST_PASSWORD = 'uibxxgweocxnwlld'
+

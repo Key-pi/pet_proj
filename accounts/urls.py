@@ -35,7 +35,6 @@ urlpatterns = [
          name='password_change'
          ),
     path('settings/account/', views.UserUpdateView.as_view(), name='my_account'),
-    path('social-auth/', include('social_django.urls', namespace='social')),
 ]
 
 SOCIAL_AUTH_URL_NAMESPACE = "social"
