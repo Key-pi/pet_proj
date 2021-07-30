@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'boards.apps.BoardsConfig',
     'widget_tweaks',
     'django_extensions',
+    'simple_history',
 ]
 
 if DEBUG:
@@ -69,7 +70,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'social_django.middleware.SocialAuthExceptionMiddleware',
-
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 

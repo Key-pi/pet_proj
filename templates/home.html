@@ -74,13 +74,12 @@
         </button>
         </p>
 
-
-        <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#exampleModalLong">
+ <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#exampleModalLong">
   Last changes
 </button>
 <!-- Modal -->
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div  class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog"  aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-body p-3 mb-2 bg-white text-dark" id="modal_actions">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Last changes</h5>
@@ -88,12 +87,37 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body " >
+          <table class="table ">
 
-          {% for log in logs %}
-       <p>{{ log }}<br></p>
-               <p>{{ logCount }}<br></p>
-        {% endfor %}
+             <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Change</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">User</th>
+                </tr>
+          </thead>
+
+           <tbody>
+                {% for hinfo in history %}
+                <tr>
+                  <th>{{ hinfo.name }}</th>
+                  <td>{{ hinfo.description }}</td>
+                {%if hinfo.history_type == '~' %}
+                  <td>Update</td>
+                {%elif hinfo.history_type == '+'%}
+                  <td>Create</td>
+                {%elif hinfo.history_type == '-'%}
+                  <td>Delete</td>
+                {%endif%}
+                  <td>{{ hinfo.history_date }}</td>
+                  <td>{{ hinfo.history_user }}</td>
+                </tr>
+                {% endfor %}
+           </tbody>
+          </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -5,6 +5,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.html import mark_safe
 from django.utils.text import Truncator
+from simple_history.models import HistoricalRecords
+
 
 from markdown import markdown
 
@@ -57,6 +59,7 @@ class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
