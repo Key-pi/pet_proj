@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Board, Post, Topic  # , Photo
+from .models import Board, Post, Topic, GalleryImages  # , Photo
 
 
 # from django.core.files import File
@@ -31,6 +31,15 @@ class BoardForm(forms.ModelForm):
     class Meta:
         model = Board
         fields = ('name', 'description')
+
+
+class GalleryImagesForm(forms.ModelForm):
+    image = forms.FileField(widget=forms.FileInput)
+
+    class Meta:
+        model = GalleryImages
+        fields = ('image', )
+
 
 # class PhotoForm(forms.ModelForm):
 #     x = forms.FileField(widget=forms.HiddenInput())

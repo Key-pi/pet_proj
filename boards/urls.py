@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.urls import path
+from django.conf.urls.static import static
 
 from . import views
 
@@ -16,5 +18,8 @@ urlpatterns = [
     path('<int:pk>/topics/<int:topic_pk>/posts/<int:post_pk>/edit/', views.PostUpdateView.as_view(), name='edit_post'),
     path('<int:pk>/topics/<int:topic_pk>/to_csv/', views.export_topic_csv, name="to_csv"),
     path('<int:pk>/topics/<int:topic_pk>/to_pdf/', views.export_topic_pdf, name="to_pdf"),
+    path('<int:pk>/topics/<int:topic_pk>/gallery/', views.gallery_images, name="gallery_images"),
 
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

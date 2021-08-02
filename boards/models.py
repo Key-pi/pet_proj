@@ -118,3 +118,9 @@ class Post(models.Model):
 
     def get_message_as_markdown(self):
         return mark_safe(markdown(self.message, safe_mode='escape'))
+
+
+class GalleryImages(models.Model):
+    image = models.ImageField(upload_to='gallery_topics')
+    topic = models.ForeignKey(Topic, related_name='gallery_images', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -22,7 +22,7 @@ def signup(request):
     return render(request, 'choose_role.html')
 
 
-def signup_blogger(request):
+def signup_blogger(request, backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
         form_user = SignUpForm(request.POST)
         form_blogger = BloggerRegisterForm(request.POST)
@@ -45,7 +45,7 @@ def signup_blogger(request):
                 messages.add_message(request, messages.SUCCESS, 'Congratulations, you have successfully registered.')
 
                 if user is not None:
-                    auth.login(request, user)
+                    auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                     send_email_task.delay(user.email)
                     return redirect('boards:home')
             else:
@@ -63,7 +63,7 @@ def signup_blogger(request):
         return render(request, 'signup_blogger.html', context={'form': form_user, 'form1': form_blogger})
 
 
-def signup_reader(request):
+def signup_reader(request,  backend='django.contrib.auth.backends.ModelBackend'):
     if request.method == "POST":
 
         form_user = SignUpForm(request.POST)
@@ -87,7 +87,7 @@ def signup_reader(request):
                 messages.add_message(request, messages.SUCCESS, "Congratulations, you have successfully registered.")
 
                 if user is not None:
-                    auth.login(request, user)
+                    auth.login(request, user,  backend='django.contrib.auth.backends.ModelBackend')
                     send_email_task.delay(user.email)
                     return redirect('boards:home')
             else:

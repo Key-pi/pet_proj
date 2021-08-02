@@ -16,8 +16,8 @@ from weasyprint import HTML
 
 # from django.contrib import messages
 
-from .forms import BoardForm, NewTopicForm, PostForm
-from .models import Board, Post, Topic
+from .forms import BoardForm, NewTopicForm, PostForm, GalleryImagesForm
+from .models import Board, Post, Topic, GalleryImages
 
 
 class BoardListView(ListView):
@@ -51,6 +51,7 @@ def save_board_form(request, form, template_name):
     return JsonResponse(data)
 
 
+@login_required
 def board_create(request):
     if request.method == 'POST':
         form = BoardForm(request.POST)
@@ -59,6 +60,7 @@ def board_create(request):
     return save_board_form(request, form, 'board_create.html')
 
 
+@login_required
 def board_update(request, pk):
     board = get_object_or_404(Board, pk=pk)
     if request.method == "POST":
@@ -68,6 +70,7 @@ def board_update(request, pk):
     return save_board_form(request, form, 'board_update.html')
 
 
+@login_required
 def board_delete(request, pk):
     board = get_object_or_404(Board, pk=pk)
     data = dict()
@@ -229,3 +232,19 @@ def export_topic_pdf(request, pk, topic_pk):
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="mypdf.pdf"'
         return response
+
+
+def gallery_images(request, pk, topic_pk):
+    topic = Topic.objects.get(pk=topic_pk)
+    if request.method == "POST":
+        form = GalleryImagesForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.topic = topic
+            image.save()
+        else:
+            form = GalleryImagesForm()
+    else:
+        form = GalleryImagesForm()
+    images = GalleryImages.objects.filter(topic=topic).order_by('-created_at')
+    return render(request, 'gallery_images.html', {'images': images, 'topic': topic, 'form': form})
