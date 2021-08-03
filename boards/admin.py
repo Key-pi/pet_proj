@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Blogger, Board, Post, Reader, Topic
+from .models import Blogger, Board, Post, Reader, Topic, Image
 
 # from django.contrib.auth.admin import UserAdmin
 # from .models import User
@@ -25,6 +25,7 @@ admin.site.register(Reader)
 admin.site.register(Board, BoardAdmin)
 admin.site.register(Topic)
 admin.site.register(Post)
+admin.site.register(Image)
 
 # @admin.register
 # class BloggerInline(admin.StackedInline):

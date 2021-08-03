@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Board, Post, Topic, GalleryImages  # , Photo
+from .models import Board, Post, Topic, Image  # , Photo
 
 
 # from django.core.files import File
@@ -15,10 +15,15 @@ class NewTopicForm(forms.ModelForm):
         max_length=4000,
         help_text='The max length of the text is 4000.'
     )
+    file_field = forms.FileField(widget=forms.FileInput(attrs={'multiple': True,
+                                                               'onchange': 'readURL(this);',
+                                                               'accept': ".jpg, .jpeg, .png",
+                                                               }), required=False)
 
     class Meta:
         model = Topic
-        fields = ['subject', 'message']
+        exclude = ('views', 'board', 'starter')
+
 
 
 class PostForm(forms.ModelForm):
@@ -33,12 +38,23 @@ class BoardForm(forms.ModelForm):
         fields = ('name', 'description')
 
 
-class GalleryImagesForm(forms.ModelForm):
-    image = forms.FileField(widget=forms.FileInput)
+class PhotoForm(forms.ModelForm):
+    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    # file_field = forms.FileField(required=False, widget=forms.FileInput(attrs={
+    #     'multiple': True,
+    #     'class': 'js-upload-photos',
+    #     'id': 'fileupload',
+    # }))
 
     class Meta:
-        model = GalleryImages
-        fields = ('image', )
+        model = Image
+        fields = ('file_field', )
+
+
+# class GalleryImagesForm(forms.ModelForm):
+#     class Meta:
+#         model = GalleryImages
+#         fields = ('file', )
 
 
 # class PhotoForm(forms.ModelForm):

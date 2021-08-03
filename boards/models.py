@@ -120,7 +120,26 @@ class Post(models.Model):
         return mark_safe(markdown(self.message, safe_mode='escape'))
 
 
-class GalleryImages(models.Model):
-    image = models.ImageField(upload_to='gallery_topics')
-    topic = models.ForeignKey(Topic, related_name='gallery_images', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+
+class Image(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='photos', related_query_name='photos')
+    file_field = models.ImageField(upload_to='gallery_topics')
+
+
+
+
+
+#
+# class GalleryImages(models.Model):
+#     image = models.ImageField(upload_to='gallery_topics')
+#     topic = models.ForeignKey(Topic, related_name='gallery_images', on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+# class GalleryImages(models.Model):
+#     topic = models.ForeignKey(Topic, related_name='gallery_images', on_delete=models.CASCADE)
+#     file = models.FileField(upload_to='gallery_topics')
+#     created_at = models.DateTimeField(auto_now_add=True)
+#
+
+
+

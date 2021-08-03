@@ -12,12 +12,13 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, UpdateView
 
+
 from weasyprint import HTML
 
 # from django.contrib import messages
 
-from .forms import BoardForm, NewTopicForm, PostForm, GalleryImagesForm
-from .models import Board, Post, Topic, GalleryImages
+from .forms import BoardForm, NewTopicForm, PostForm, PhotoForm
+from .models import Board, Post, Topic, Image
 
 
 class BoardListView(ListView):
@@ -122,6 +123,15 @@ def new_topic(request, pk):
                 topic=topic,
                 created_by=request.user
             )
+            files = request.FILES.getlist('file_field')
+            for file in files:
+                request.FILES['file_field'] = file
+                photos_form = PhotoForm(request.POST, request.FILES)
+                if photos_form.is_valid():
+                    photos_objects = photos_form.save(commit=False)
+                    photos_objects.topic = topic
+                    photos_objects.save()
+
             return redirect('boards:topic_posts', pk=pk, topic_pk=topic.pk)
         else:
             return render(request, 'new_topic.html', {'form': form, 'board': board})
@@ -145,7 +155,10 @@ class PostListView(ListView):
             self.request.session[session_key] = True
 
         kwargs['topic'] = self.topic
-        return super().get_context_data(**kwargs)
+        res = super().get_context_data(**kwargs)
+        photos = res.get('topic').photos
+        res.update({'photos': photos})
+        return res
 
     def get_queryset(self):
         self.topic = get_object_or_404(Topic, board__pk=self.kwargs.get('pk'), pk=self.kwargs.get('topic_pk'))
@@ -234,17 +247,32 @@ def export_topic_pdf(request, pk, topic_pk):
         return response
 
 
-def gallery_images(request, pk, topic_pk):
-    topic = Topic.objects.get(pk=topic_pk)
+
+def photo_create(request, pk):
+    data = dict()
+    board = Board.objects.get(pk=pk)
     if request.method == "POST":
-        form = GalleryImagesForm(request.POST, request.FILES)
-        if form.is_valid():
-            image = form.save(commit=False)
-            image.topic = topic
-            image.save()
-        else:
-            form = GalleryImagesForm()
-    else:
-        form = GalleryImagesForm()
-    images = GalleryImages.objects.filter(topic=topic).order_by('-created_at')
-    return render(request, 'gallery_images.html', {'images': images, 'topic': topic, 'form': form})
+        photo = request.FILES.get('file')
+        data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.name}
+        return JsonResponse(data)
+
+
+
+
+
+
+
+# def gallery_images(request, pk, topic_pk):
+#     topic = Topic.objects.get(pk=topic_pk)
+#     if request.method == "POST":
+#         form = GalleryImagesForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             image = form.save(commit=False)
+#             image.topic = topic
+#             image.save()
+#         else:
+#             form = GalleryImagesForm()
+#     else:
+#         form = GalleryImagesForm()
+#     images = GalleryImages.objects.filter(topic=topic).order_by('-created_at')
+#     return render(request, 'gallery_images.html', {'images': images, 'topic': topic, 'form': form})

@@ -12,6 +12,7 @@
 
 {% block content %}
 
+
     <div class="mb-4 ">
     <a href="{% url 'boards:reply_topic' topic.board.pk topic.pk %}" class="btn btn-primary" role="button">Reply</a>
      <a href="{% url 'boards:to_csv' topic.board.pk topic.pk %}"  class="btn btn-primary">Import CSV</a>
@@ -22,10 +23,24 @@
     </div>
 
   {% for post in posts %}
+      <input id="fileupload" type="file" name="file" multiple
+       style="display: none;"
+       data-url="{% url 'boards:basic_upload' post.topic.pk%}"
+       data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+
+
+
+
+
     <div id="{{ post.pk }}" class="card {% if forloop.last %}mb-4{% else %}mb-2{% endif %} {% if forloop.first %}border-dark{% endif %}">
       {% if forloop.first %}
         <div class="card-header text-white bg-dark py-2 px-3">{{ topic.subject }}</div>
+
+            rewwev
+        <img src="/{{post.file_field}}" class="img-thumbnail" style="height: 200px;" alt="">
+
       {% endif %}
+
       <div class="card-body p-3">
         <div class="row">
           <div class="col-2">

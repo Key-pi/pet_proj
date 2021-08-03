@@ -1,3 +1,7 @@
 .navbar-brand {
     font-family: 'Perlata', cursive;
 }
+
+.gallery-image-item{
+  width:200px !important;
+}

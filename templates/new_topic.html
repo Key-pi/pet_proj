@@ -1,19 +1,192 @@
 {% extends 'base.html' %}
 
 {% load widget_tweaks %}
+{% load static %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'css/fileinput.css' %}">
+{% endblock %}
 
 {% block title %}Start a New Topic{% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">Boards</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a></li>
-  <li class="breadcrumb-item active">New topic</li>
+    <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">Boards</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a></li>
+    <li class="breadcrumb-item active">New topic</li>
 {% endblock %}
 
 {% block content %}
- <form method="post" novalidate>
-  {% csrf_token %}
-  {% include 'includes/form.html' %}
-  <button type="submit" class="btn btn-success">Post</button>
-</form>
+    <form method="post" novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <button type="submit" class="js-upload-photos btn btn-success mb-2">Post</button>
+
+    </form>
+
+
+    <table id="my_photo"></table>
+
+
+
+    {% include 'photos.html' %}
+
+    {% block javascript %}
+
+        <script src="{% static 'js/jquery.ui.widget.js' %}"></script>
+        <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+        <script src="{% static 'js/jquery.fileupload.js' %}"></script>
+        <script src="{% static 'js/basic-upload.js' %}"></script>
+          <script type="text/javascript">
+            function readURL(input) {
+                console.log('i am pressed');
+                let table = document.getElementById("gallery");
+                table.innerHTML = "";
+                for (let i = 0; i < input.files.length; i++) {
+                var newRow = table.insertRow(0);
+
+                // Insert a cell in the row at index 0
+                var newCell = newRow.insertCell(0);
+                var img = document.createElement("img");
+                img.classList.add("obj");
+                img.file = input.files[i];
+                newCell.appendChild(img);
+
+                // Append a text node to the cell
+                var newText = document.createTextNode(input.files[i].name);
+                newCell.appendChild(newText);
+            }
+            }
+</script>
+
+
+
+
+
+{#         <script type="text/javascript">#}
+{#            function readURL(input) {#}
+{#                console.log(input);#}
+{##}
+{#                let table = document.getElementById("gallery");#}
+{#                table.innerHTML = "";#}
+{#                for (let i = 0; i < input.files.length; i++) {#}
+{#                    var newRow = table.insertRow(0);#}
+{##}
+{#                    // Insert a cell in the row at index 0#}
+{#                    var newCell = newRow.insertCell(0);#}
+{#                    var img = document.createElement("img");#}
+{#                    img.classList.add("obj");#}
+{#                    img.file = input.files[i];#}
+{#                    img.style.height = "100px"#}
+{##}
+{#                    // Append a text node to the cell#}
+{#                    var newText = document.createTextNode(input.files[i].name);#}
+{#                    var newTextName = newText.data.split(" ").join("_")#}
+{#                    img.src = `http://mysite.ua:8000/media/gallery_topics/${newTextName}`#}
+{#                    newCell.appendChild(img);#}
+{##}
+{#                    var cell = `${newCell.innerHTML}#}
+{#                        <a#}
+{#                            href="http://mysite.ua:8000/media/gallery_topics/${newTextName}"#}
+{#                            target="_blank"#}
+{#                        >#}
+{#                            ${newTextName}#}
+{#                        </a>`;#}
+{##}
+{#                    newCell.innerHTML = cell;#}
+{#                }#}
+{#            }#}
+{#        </script>#}
+    {% endblock %}
+
+
 {% endblock %}
+
+
+
+
+{##}
+{#{% extends 'base.html' %}#}
+{#{% load widget_tweaks static %}#}
+{#{% block javascript %}#}
+{# <script src="{% static 'js/jquery.ui.widget.js' %}"></script>#}
+{#        <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>#}
+{#        <script src="{% static 'js/jquery.fileupload.js' %}"></script>#}
+{#        <script src="{% static 'js/basic-upload.js' %}"></script>#}
+{#        <script src="{% static 'js/progress-bar-upload.js' %}"></script>#}
+{#{% endblock %}#}
+{#{% block title %}Start a New Topic{% endblock %}#}
+{#{% block breadcrumb %}#}
+{#<li class="breadcrumb-item"><a href="{% url 'boards:home' %}">Boards</a></li>#}
+{#<li class="breadcrumb-item"><a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a></li>#}
+{#<li class="breadcrumb-item active">New topic</li>#}
+{#{% endblock %}#}
+{#{% block content %}#}
+{#{%comment%}#}
+{#<form method="post" novalidate>#}
+{#    {% csrf_token %}#}
+{#    {% for field in form %}#}
+{#      <div class="form-group">#}
+{#        {{ field.label_tag }}#}
+{#        {% if form.is_bound %}#}
+{#          {% if field.errors %}#}
+{#            {% render_field field class="form-control is-invalid" %}#}
+{#            {% for error in field.errors %}#}
+{#              <div class="invalid-feedback">#}
+{#                {{ error }}#}
+{#              </div>#}
+{#            {% endfor %}#}
+{#          {% else %}#}
+{#            {% render_field field class="form-control is-valid" %}#}
+{#          {% endif %}#}
+{#        {% else %}#}
+{#          {% render_field field class="form-control" %}#}
+{#        {% endif %}#}
+{#        {% if field.help_text %}#}
+{#          <small class="form-text text-muted">#}
+{#            {{ field.help_text }}#}
+{#          </small>#}
+{#        {% endif %}#}
+{#      </div>#}
+{#    {% endfor %}#}
+{#    <button type="submit" class="btn btn-success">Post</button>#}
+{#  </form>#}
+{#{%endcomment%}#}
+{#<div style="margin-bottom: 20px;">#}
+{#<form method="POST" enctype="multipart/form-data">#}
+{#  {% csrf_token %}#}
+{#  {% include 'includes/form.html' %}#}
+{#  <!-- <button type="button" class="btn btn-primary js-upload-photos">#}
+{#    <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos#}
+{#  </button> -->#}
+{#</div>#}
+{#<button type="submit" class="btn btn-success mb-5">POST</button>#}
+{#</form>#}
+{#<table id="gallery" class="table table-bordered ">#}
+{#  <thead>#}
+{#    <tr>#}
+{#      <th>Photo</th>#}
+{#    </tr>#}
+{#  </thead>#}
+{#  <tbody>#}
+{#    {% for photo in photos %}#}
+{#      <tr>#}
+{#        <td><a href="{{ photo.file_field.url }}">{{ photo.file_field.name }}</a></td>#}
+{#      </tr>#}
+{#    {% endfor %}#}
+{#  </tbody>#}
+{#</table>#}
+{#<div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">#}
+{#  <div class="modal-dialog">#}
+{#    <div class="modal-content">#}
+{#      <div class="modal-header">#}
+{#        <h4 class="modal-title">Uploading...</h4>#}
+{#      </div>#}
+{#      <div class="modal-body">#}
+{#        <div class="progress">#}
+{#          <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+{#{% endblock %}#}
