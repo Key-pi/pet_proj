@@ -11,11 +11,13 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 import requests
 
-from .forms import BloggerRegisterForm, ReaderRegisterForm, SignUpForm
-from .tasks import send_email_task
+from .forms import BloggerRegisterForm, ReaderRegisterForm, SignUpForm, ContactForm
+from .tasks import send_email_task, contact_form_task
 
 
 def signup(request):
@@ -136,3 +138,55 @@ class UserUpdateView(SuccessMessageMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+
+def save_board_form(request, form, template_name):
+    data = dict()
+    if request.method == 'POST':
+        if form.is_valid():
+            data['form_is_valid'] = True
+            data['html_partial_board'] = render_to_string('base.html')
+        else:
+            data['form_is_valid'] = False
+    context = {'form': form}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        name = form.data['name']
+        email = form.data['email']
+        contact_form_task(email=email, name=name)
+    else:
+        form = ContactForm()
+    return save_board_form(request, form, 'contact.html')
+
+
+
+
+
+
+
+
+
+# def contact(request):
+#     data = dict()
+#     if request.method == "POST":
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#
+#             data['form_is_valid'] = True
+#             data['html_contact_list'] = render_to_string('base.html', {
+#                 'form': form
+#             })
+#         else:
+#             data['form_is_valid'] = False
+#     else:
+#         form = ContactForm()
+#         context = {'form': form}
+#         data['html_form'] = render_to_string('contact_form.html', context, request=request)
+#         return JsonResponse(data)

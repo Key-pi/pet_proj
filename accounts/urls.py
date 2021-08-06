@@ -35,6 +35,7 @@ urlpatterns = [
          name='password_change'
          ),
     path('settings/account/', views.UserUpdateView.as_view(), name='my_account'),
+    path('contact/', views.contact, name='contact'),
 ]
 
 SOCIAL_AUTH_URL_NAMESPACE = "social"
