@@ -98,7 +98,7 @@
 {#</div>#}
 {##}
 
-
+{% block modal %}
 
 <form method="post" action="{% url 'accounts:contact' %}" class="js-contact-form">
   {% csrf_token %}
@@ -114,6 +114,6 @@
   </div>
 </form>
 
-
+{% endblock %}
 
 

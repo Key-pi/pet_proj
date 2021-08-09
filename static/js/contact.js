@@ -3,7 +3,7 @@ $(function () {
   /* Functions */
 
   var loadForm = function () {
-    // debugger
+
     var btn = $(this);
     $.ajax({
       url: btn.attr("data-url"),
@@ -20,7 +20,7 @@ $(function () {
   };
 
   var saveForm = function () {
-    // var form = $(this);
+    var form = $(this);
     $.ajax({
       url: form.attr("action"),
       data: form.serialize(),
@@ -30,8 +30,11 @@ $(function () {
                   console.log('yayayayayayayayayaaya')
 
         if (data.form_is_valid) {
-          $(".modal-content").html(data.html_partial_board);
-          $(".js-contact-form").modal("hide");
+
+
+          $(".modal-content").html(data.html_partial_contact);
+          alert('We have already sent you an SMS')
+          $("#modal-contact").modal("hide");
         }
         else {
           $("#modal-body .modal-content").html(data.html_form);
@@ -47,7 +50,7 @@ $(function () {
   // Create book
   $(".js-contact").click(loadForm);
   // $(".js-contact-form").click(saveForm);
-    $("#modal-board").on("submit", ".js-contact-form", saveForm);
+    $("#modal-contact").on("submit", ".js-contact-form", saveForm);
   // $(".js-contact-form").submit(saveForm);
 
   // Update book
